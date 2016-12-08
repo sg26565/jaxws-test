@@ -19,12 +19,13 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<!-- copy all dependencies of type wsdl and scope provided into target/wsdl -->
 			<plugin>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.10</version>
 				<executions>
 					<execution>
-						<id>import-wsdl</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
@@ -34,10 +35,13 @@
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<includeTypes>wsdl</includeTypes>
+							<includeScope>provided</includeScope>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			
+			<!-- generate source for all wsdl files in target/wsdl -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
@@ -96,6 +100,7 @@
 
 	<dependencies>
 		<dependency>
+			<!-- dependency on wsdl file from server side -->
 			<groupId>de.treichels.sample</groupId>
 			<artifactId>sample-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

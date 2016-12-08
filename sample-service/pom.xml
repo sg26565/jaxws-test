@@ -19,28 +19,35 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<!-- run war:war goal three times (for dev,qa and prod) with different classifiers -->
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
+					<!-- package classes as a jar file and put them into WEB-INF/lib intead of WEB-INF/classes -->
 					<archiveClasses>true</archiveClasses>
 				</configuration>
 				<executions>
 					<execution>
+						<!-- default-war replaces the default execution -->
 						<id>default-war</id>
 						<phase>package</phase>
 						<goals>
 							<goal>war</goal>
 						</goals>
 						<configuration>
+							<!-- add jar file as an additional build artifact with classifier "classes" -->
 							<attachClasses>true</attachClasses>
 							<webResources>
 								<webResource>
+									<!-- copy resources from env/dev to WEB-INF/classes -->
 									<directory>env/dev</directory>
 									<targetPath>WEB-INF/classes</targetPath>
 								</webResource>
 							</webResources>
 							<classifier>dev</classifier>
+							<!-- use a separate build directory to avoid conflicts -->
 							<webappDirectory>${project.build.directory}/${project.build.finalName}-dev</webappDirectory>
 						</configuration>
 					</execution>
@@ -53,11 +60,13 @@
 						<configuration>
 							<webResources>
 								<webResource>
+									<!-- copy resources from env/qa to WEB-INF/classes -->
 									<directory>env/qa</directory>
 									<targetPath>WEB-INF/classes</targetPath>
 								</webResource>
 							</webResources>
 							<classifier>qa</classifier>
+							<!-- use a separate build directory to avoid conflicts -->
 							<webappDirectory>${project.build.directory}/${project.build.finalName}-qa</webappDirectory>
 						</configuration>
 					</execution>
@@ -70,16 +79,20 @@
 						<configuration>
 							<webResources>
 								<webResource>
+									<!-- copy resources from env/prod to WEB-INF/classes -->
 									<directory>env/prod</directory>
 									<targetPath>WEB-INF/classes</targetPath>
 								</webResource>
 							</webResources>
 							<classifier>prod</classifier>
+							<!-- use a separate build directory to avoid conflicts -->
 							<webappDirectory>${project.build.directory}/${project.build.finalName}-prod</webappDirectory>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- generate wsdl from source code annotations using wsgen -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
@@ -98,13 +111,14 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- store wsdl as additional artifact in repository with type "wsdl" -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>1.9.1</version>
 				<executions>
 					<execution>
-						<id>attach-artifacts</id>
 						<phase>package</phase>
 						<goals>
 							<goal>attach-artifact</goal>
