@@ -1,33 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.treichels.sample</groupId>
 	<artifactId>sample-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<parent>
+		<groupId>de.treichels.sample</groupId>
+		<artifactId>jaxws-test</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
 	<build>
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-
-			<!-- run war:war goal three times (for dev,qa and prod) with different classifiers -->
+			<!-- run war:war goal three times (for dev, qa and prod) with different classifiers -->
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<!-- package classes as a jar file and put them into WEB-INF/lib intead of WEB-INF/classes -->
-					<archiveClasses>true</archiveClasses>
-				</configuration>
 				<executions>
 					<execution>
 						<!-- default-war replaces the default execution -->
@@ -37,7 +23,7 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<!-- add jar file as an additional build artifact with classifier "classes" -->
+							<!-- add classes jar file as an additional build artifact with classifier "classes" -->
 							<attachClasses>true</attachClasses>
 							<webResources>
 								<webResource>
@@ -46,6 +32,7 @@
 									<targetPath>WEB-INF/classes</targetPath>
 								</webResource>
 							</webResources>
+							<!-- will produce ${project.build.finalName}-dev.war -->
 							<classifier>dev</classifier>
 							<!-- use a separate build directory to avoid conflicts -->
 							<webappDirectory>${project.build.directory}/${project.build.finalName}-dev</webappDirectory>
@@ -65,6 +52,7 @@
 									<targetPath>WEB-INF/classes</targetPath>
 								</webResource>
 							</webResources>
+							<!-- will produce ${project.build.finalName}-qa.war -->
 							<classifier>qa</classifier>
 							<!-- use a separate build directory to avoid conflicts -->
 							<webappDirectory>${project.build.directory}/${project.build.finalName}-qa</webappDirectory>
@@ -84,6 +72,7 @@
 									<targetPath>WEB-INF/classes</targetPath>
 								</webResource>
 							</webResources>
+							<!-- will produce ${project.build.finalName}-prod.war -->
 							<classifier>prod</classifier>
 							<!-- use a separate build directory to avoid conflicts -->
 							<webappDirectory>${project.build.directory}/${project.build.finalName}-prod</webappDirectory>
@@ -96,7 +85,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.4.1</version>
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
@@ -116,7 +104,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.9.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -141,12 +128,10 @@
 		<dependency>
 			<groupId>org.glassfish.metro</groupId>
 			<artifactId>webservices-rt</artifactId>
-			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
