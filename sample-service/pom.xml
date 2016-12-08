@@ -20,6 +20,67 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<archiveClasses>true</archiveClasses>
+				</configuration>
+				<executions>
+					<execution>
+						<id>default-war</id>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<attachClasses>true</attachClasses>
+							<webResources>
+								<webResource>
+									<directory>env/dev</directory>
+									<targetPath>WEB-INF/classes</targetPath>
+								</webResource>
+							</webResources>
+							<classifier>dev</classifier>
+							<webappDirectory>${project.build.directory}/${project.build.finalName}-dev</webappDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>qa</id>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webResources>
+								<webResource>
+									<directory>env/qa</directory>
+									<targetPath>WEB-INF/classes</targetPath>
+								</webResource>
+							</webResources>
+							<classifier>qa</classifier>
+							<webappDirectory>${project.build.directory}/${project.build.finalName}-qa</webappDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>prod</id>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<webResources>
+								<webResource>
+									<directory>env/prod</directory>
+									<targetPath>WEB-INF/classes</targetPath>
+								</webResource>
+							</webResources>
+							<classifier>prod</classifier>
+							<webappDirectory>${project.build.directory}/${project.build.finalName}-prod</webappDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
 				<version>2.4.1</version>
